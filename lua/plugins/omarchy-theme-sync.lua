@@ -66,16 +66,23 @@ local theme_mapping = {
 function M.get_current_omarchy_theme()
   -- Método 1: Leer directamente del archivo neovim.lua generado por omarchy
   local neovim_config_path = vim.fn.expand("~/.config/omarchy/current/theme/neovim.lua")
-  local file = io.open(neovim_config_path, "r")
+  local file, err = io.open(neovim_config_path, "r")
   if file then
-    local content = file:read("*a")
+    local content, read_err = file:read("*a")
     file:close()
 
-    -- Buscar el colorscheme en el archivo
-    local colorscheme = content:match('colorscheme = "([^"]+)"')
-    if colorscheme then
-      return colorscheme
+    if read_err then
+      vim.notify("Error al leer el archivo de tema de omarchy: " .. tostring(read_err), vim.log.levels.WARN)
+    elseif content then
+      -- Buscar el colorscheme en el archivo
+      local colorscheme = content:match('colorscheme = "([^"]+)"')
+      if colorscheme then
+        return colorscheme
+      end
     end
+  elseif err then
+    -- No es un error, solo un log informativo si el archivo no existe
+    vim.notify("Archivo de tema de omarchy no encontrado en " .. neovim_config_path .. ". Usando fallback.", vim.log.levels.INFO)
   end
 
   -- Método 2: Usar readlink como fallback (método original mejorado)
@@ -214,7 +221,12 @@ end
 
 -- Función principal para sincronizar
 function M.sync_with_omarchy()
-  local current_theme = M.get_current_omarchy_theme()
+  local ok, current_theme = pcall(M.get_current_omarchy_theme)
+  if not ok then
+    vim.notify("Error al detectar el tema de omarchy: " .. tostring(current_theme), vim.log.levels.ERROR)
+    return
+  end
+
   if current_theme then
     M.apply_theme(current_theme)
   else
