@@ -34,9 +34,9 @@ require("lazy").setup({
         end)
 
         if ok and theme_name then
-          local trimmed_theme = theme_name:match("^%%s*(.-)%%s*$")
+          local trimmed_theme = theme_name:match("^%s*(.-)%s*$")
           if trimmed_theme and trimmed_theme ~= "" then
-            local onedark_match = trimmed_theme:match("^onedark %%((.+)%%)$")
+            local onedark_match = trimmed_theme:match("^onedark %((.+)%)$")
             if onedark_match then
               pcall(require("onedark").setup, { style = onedark_match })
               return "onedark"

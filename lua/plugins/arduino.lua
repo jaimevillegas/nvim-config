@@ -7,11 +7,6 @@ return {
       opts.ensure_installed = opts.ensure_installed or {}
       vim.list_extend(opts.ensure_installed, { "c", "cpp", "arduino" })
 
-      -- Configuración específica para resaltado
-      opts.highlight = opts.highlight or {}
-      opts.highlight.enable = true
-      opts.highlight.additional_vim_regex_highlighting = false
-
       return opts
     end,
   },

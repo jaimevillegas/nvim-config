@@ -47,4 +47,24 @@ return {
     priority = 1000,
     lazy = false,
   },
+  {
+    "Mofiqul/dracula.nvim",
+    priority = 1000,
+    lazy = false,
+  },
+  {
+    "sainnhe/sonokai",
+    priority = 1000,
+    lazy = false,
+  },
+  {
+    "craftzdog/solarized-osaka.nvim",
+    priority = 1000,
+    lazy = false,
+  },
+  {
+    "savq/melange-nvim",
+    priority = 1000,
+    lazy = false,
+  },
 }

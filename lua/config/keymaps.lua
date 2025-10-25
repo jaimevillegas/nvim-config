@@ -6,7 +6,29 @@ local map = vim.keymap.set
 
 map("n", "<leader>t", function()
   -- Get all available colorschemes
-  local themes = vim.fn.getcompletion("", "color")
+  local all_themes = vim.fn.getcompletion("", "color")
+
+  -- Legacy themes to exclude
+  local legacy_themes = {
+    "blue", "darkblue", "default", "delek", "desert", "elflord",
+    "evening", "habamax", "industry", "koehler", "lunaperche",
+    "morning", "murphy", "pablo", "peachpuff", "quiet", "retrobox",
+    "ron", "shine", "slate", "sorbet", "torte", "unokai", "vim",
+    "wildcharm", "zaibatsu", "zellner"
+  }
+
+  -- Filter out legacy themes
+  local themes = {}
+  local legacy_set = {}
+  for _, theme in ipairs(legacy_themes) do
+    legacy_set[theme] = true
+  end
+
+  for _, theme in ipairs(all_themes) do
+    if not legacy_set[theme] then
+      table.insert(themes, theme)
+    end
+  end
 
   -- Add onedark variations
   local onedark_variations = { "dark", "darker", "cool", "deep", "warm", "warmer", "light" }
@@ -18,7 +40,7 @@ map("n", "<leader>t", function()
   vim.ui.select(themes, { prompt = "Select a theme:" }, function(choice)
     if choice then
       -- Check if it's a onedark variation
-      local onedark_match = choice:match("^onedark %%((.+)%%)$")
+      local onedark_match = choice:match("^onedark %((.+)%)$")
       if onedark_match then
         -- Setup onedark with the selected style
         pcall(require("onedark").setup, { style = onedark_match })
