@@ -80,18 +80,20 @@ function M.setup()
   vim.keymap.set("n", "<leader>ai", arduino_cli.show_config,
     vim.tbl_extend("force", keymap_opts, { desc = "Show Arduino Config" }))
 
-  -- Library management submenu (<leader>al)
-  vim.keymap.set("n", "<leader>als", arduino_cli.search_library,
-    vim.tbl_extend("force", keymap_opts, { desc = "Search Library" }))
+  -- Library management submenu (<leader>al) - Using Telescope
+  local lib_manager = require("arduino-cli.library-manager")
 
-  vim.keymap.set("n", "<leader>ali", arduino_cli.install_library,
-    vim.tbl_extend("force", keymap_opts, { desc = "Install Library" }))
+  vim.keymap.set("n", "<leader>als", lib_manager.search_libraries,
+    vim.tbl_extend("force", keymap_opts, { desc = "Search Libraries (Telescope)" }))
 
-  vim.keymap.set("n", "<leader>all", arduino_cli.list_libraries,
-    vim.tbl_extend("force", keymap_opts, { desc = "List Libraries" }))
+  vim.keymap.set("n", "<leader>ali", lib_manager.show_installed_libraries,
+    vim.tbl_extend("force", keymap_opts, { desc = "Installed Libraries (Telescope)" }))
 
-  vim.keymap.set("n", "<leader>alu", arduino_cli.update_libraries,
-    vim.tbl_extend("force", keymap_opts, { desc = "Update Libraries" }))
+  vim.keymap.set("n", "<leader>alu", lib_manager.update_all_libraries,
+    vim.tbl_extend("force", keymap_opts, { desc = "Update All Libraries" }))
+
+  vim.keymap.set("n", "<leader>alh", lib_manager.show_help,
+    vim.tbl_extend("force", keymap_opts, { desc = "Library Manager Help" }))
 
   -- Core management submenu (<leader>aC)
   vim.keymap.set("n", "<leader>aCi", arduino_cli.install_core,
@@ -159,10 +161,10 @@ function M.setup()
       { "<leader>ai", desc = "Show Config" },
 
       { "<leader>al", group = "Libraries" },
-      { "<leader>als", desc = "Search" },
-      { "<leader>ali", desc = "Install" },
-      { "<leader>all", desc = "List" },
-      { "<leader>alu", desc = "Update" },
+      { "<leader>als", desc = "Search (Telescope)" },
+      { "<leader>ali", desc = "Installed (Telescope)" },
+      { "<leader>alu", desc = "Update All" },
+      { "<leader>alh", desc = "Help" },
 
       { "<leader>aC", group = "Cores" },
       { "<leader>aCi", desc = "Install" },
